@@ -1,0 +1,41 @@
+﻿@page "/map";
+@using MapGenerator.Data;
+@inject IMapGeneratorService MapGeneratorService;
+
+<link href="css/mapGeneratorStyle.css" rel="stylesheet" />
+
+<PageTitle>Map Geneator</PageTitle>
+
+<h3>MapGenerator</h3>
+
+<button @onclick="GenerateMap">
+    Regenerate map
+</button>
+
+<table>
+    @for (int y = 0; y < _map.Grid.GetLength(1); y++)
+    {
+        <tr>
+            @for (int x = 0; x < _map.Grid.GetLength(0); x++)
+            {
+                <td style='background: @_map.Grid[x,y].Color'>x:@x<br />y:@y</td>
+                // <td style="background: @_map.Grid[x,y].Color">@Math.Round(_map.Grid[x, y].NoiseValue, 2)</td>
+                // <td style="background: @_map.Grid[x,y].Color"></td>
+            }
+        </tr>
+    }
+</table>
+
+@code {
+    private MapData? _map;
+
+    protected override async Task OnInitializedAsync()
+    {
+        _map = await MapGeneratorService.GetMap();
+    }
+
+    public async Task GenerateMap()
+    {
+        _map = await MapGeneratorService.GetMap(true);
+    }
+}

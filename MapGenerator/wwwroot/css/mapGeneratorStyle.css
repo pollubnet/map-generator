@@ -1,0 +1,11 @@
+﻿table {
+    border: 1px solid;
+}
+
+td {
+    min-width: 32px;
+    height: 32px;
+    font-size: 7px;
+    text-align: center;
+    /* border: 1px solid black; */
+}
