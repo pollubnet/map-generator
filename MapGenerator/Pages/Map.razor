@@ -9,25 +9,51 @@
 <h3>MapGenerator</h3>
 
 <button @onclick="GenerateMap">
-    Regenerate map
+    Generate new
+</button>
+<button @onclick="ShowPositions">
+    Show positions
+</button>
+<button @onclick="ShowNoiseValues">
+    Show noise values
+</button>
+<button @onclick="ToggleColors">
+    Toggle colors
 </button>
 
 <table>
-    @for (int y = 0; y < _map.Grid.GetLength(1); y++)
-    {
-        <tr>
-            @for (int x = 0; x < _map.Grid.GetLength(0); x++)
-            {
-                <td style='background: @_map.Grid[x,y].Color'>x:@x<br />y:@y</td>
-                // <td style="background: @_map.Grid[x,y].Color">@Math.Round(_map.Grid[x, y].NoiseValue, 2)</td>
-                // <td style="background: @_map.Grid[x,y].Color"></td>
-            }
-        </tr>
+    @if (_map != null){
+        @for (int y = 0; y < _map.Grid.GetLength(1); y++)
+        {
+            <tr>
+                @for (int x = 0; x < _map.Grid.GetLength(0); x++)
+                {
+                    @if (showPositions)
+                    {
+                        <td style='background: @GetTileColor(@_map.Grid[x,y])'>x:@x<br />y:@y</td>
+                    }
+                    else if (showNoiseValues)
+                    {
+                        <td style="background: @GetTileColor(@_map.Grid[x,y])">@Math.Round(_map.Grid[x, y].NoiseValue, 2)</td>
+                    }
+                    else
+                    {
+                        <td style='background: @GetTileColor(@_map.Grid[x,y])'></td>
+                    }
+                }
+            </tr>
+        }
     }
+
 </table>
 
 @code {
     private MapData? _map;
+
+    private bool showPositions = false;
+    private bool showNoiseValues = false;
+
+    private bool showColorMap = true;
 
     protected override async Task OnInitializedAsync()
     {
@@ -37,5 +63,37 @@
     public async Task GenerateMap()
     {
         _map = await MapGeneratorService.GetMap(true);
+    }
+
+    private void ShowPositions()
+    {
+        showPositions = !showPositions;
+        showNoiseValues = false;
+    }
+
+    private void ShowNoiseValues()
+    {
+        showNoiseValues = !showNoiseValues;
+        showPositions = false;
+    }
+
+    private void ToggleColors()
+    {
+        showColorMap = !showColorMap;
+    }
+
+    private string GetTileColor(Node node)
+    {
+        if (!showColorMap)
+        {
+            string hexValue = string.Format("{0:x}", (int)(node.NoiseValue * 255));
+            if (hexValue.Length == 1)
+            {
+                hexValue = "0" + hexValue;
+            }
+            return $"#{hexValue}{hexValue}{hexValue}";
+        }
+
+        return node.Color;
     }
 }
