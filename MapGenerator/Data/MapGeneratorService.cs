@@ -38,8 +38,8 @@ public class MapGeneratorService : IMapGeneratorService
         int octaves = 5;
         float persistance = 0.5f;
         float lacunarity = 2f;
-        int width = 32;
-        int height = 32;
+        int width = 48;
+        int height = 48;
         bool useFalloff = true;
 
         Node[,] grid = new Node[width, height];
@@ -59,17 +59,33 @@ public class MapGeneratorService : IMapGeneratorService
                 grid[x, y] = new Node(x, y, null);
                 grid[x, y].NoiseValue = heightMap[x, y];
 
-                if (heightMap[x, y] < 0.2f)
+                if (heightMap[x, y] < 0.02f)
                 {
-                    grid[x, y].Color = "#3498DB";
+                    grid[x, y].Color = "#21618C";
                 }
-                else if (heightMap[x, y] < 0.8f)
+                else if (heightMap[x, y] < 0.2f)
                 {
-                    grid[x, y].Color = "#27AE60";
+                    grid[x, y].Color = "#2E86C1";
+                }
+                else if (heightMap[x, y] < 0.40f)
+                {
+                    grid[x, y].Color = "#F9E79F";
+                }
+                else if (heightMap[x, y] < 0.55f)
+                {
+                    grid[x, y].Color = "#28B463";
+                }
+                else if (heightMap[x, y] < 0.7f)
+                {
+                    grid[x, y].Color = "#1D8348";
+                }
+                else if (heightMap[x, y] < 0.85f)
+                {
+                    grid[x, y].Color = "#616A6B";
                 }
                 else
                 {
-                    grid[x, y].Color = "#839192";
+                    grid[x, y].Color = "#515A5A";
                 }
             }
         }
