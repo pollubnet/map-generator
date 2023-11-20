@@ -8,6 +8,7 @@ public class Node
 
     public string Color { get; set; }
     public float NoiseValue { get; set; }
+    public float Cos { get; set; }
 
     public Node(int xId, int yId, Biome biome)
     {
