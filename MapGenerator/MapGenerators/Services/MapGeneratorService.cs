@@ -1,12 +1,20 @@
-﻿using MapGenerator.NoiseGenerators;
-using System.Drawing;
+﻿using MapGenerator.MapGenerators.Data;
+using MapGenerator.NoiseGenerators;
+using MapGenerator.NoiseGenerators.Data;
 using System.Numerics;
 
-namespace MapGenerator.Data;
+namespace MapGenerator.MapGenerators.Services;
 
 public class MapGeneratorService : IMapGeneratorService
 {
     private MapData map;
+
+    private float persistance = 0.5f;
+    private float lacunarity = 2f;
+    private int octaves = 5;
+    private float scale = 5f;
+
+    private Random rnd = new Random();
 
     //private Dictionary<(TemperatureType, HeightType), Biome> biomesDictionary = new Dictionary<(TemperatureType, HeightType), Biome>
     //{
@@ -22,25 +30,23 @@ public class MapGeneratorService : IMapGeneratorService
 
     private int seed;
 
-    public Task<MapData> GetMap(bool generateNew = false)
+    public Task<MapData> GetMap(NoiseParameters noiseParameters)
     {
-        if (map == null || generateNew)
-        {
-            map = GenerateMap();
-            seed++;
-        }
+        map = GenerateMap(noiseParameters);
         return Task.FromResult(map);
+        //if (map == null || noiseParameters.GenerateNew)
+        //{
+        //    map = GenerateMap(noiseParameters);
+        //}
+        //return Task.FromResult(map);
     }
 
-    private MapData GenerateMap()
+    private MapData GenerateMap(NoiseParameters noiseParameters)
     {
-        float scale = 15f;
-        int octaves = 5;
-        float persistance = 0.5f;
-        float lacunarity = 2f;
-        int width = 48;
-        int height = 48;
+        int width = 32;
+        int height = 32;
         bool useFalloff = true;
+        seed = noiseParameters.UseRandomSeed ? rnd.Next(int.MaxValue) : noiseParameters.Seed;
 
         Node[,] grid = new Node[width, height];
         float[,] falloffMap = FalloffGenerator.Generate(width);

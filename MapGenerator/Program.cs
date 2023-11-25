@@ -1,4 +1,4 @@
-using MapGenerator.Data;
+using MapGenerator.MapGenerators.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -6,7 +6,6 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
 builder.Services.AddSingleton<IMapGeneratorService, MapGeneratorService>();
-builder.Services.AddSingleton<WeatherForecastService>();
 
 var app = builder.Build();
 
@@ -18,7 +17,7 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
-app.UseHttpsRedirection();
+// app.UseHttpsRedirection();
 
 app.UseStaticFiles();
 
