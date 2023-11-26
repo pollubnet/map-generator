@@ -47,10 +47,12 @@ public static class NoiseGenerator
                 float frequency = 1;
                 float noiseHeight = 0;
 
+                float scalarX = (x - halfWidth) / scale;
+                float scalarY = (y - halfHeight) / scale;
                 for (int i = 0; i < octaves; i++)
                 {
-                    float sampleX = (x - halfWidth) / scale * frequency + octaveOffsets[i].X;
-                    float sampleY = (y - halfHeight) / scale * frequency + octaveOffsets[i].Y;
+                    float sampleX = scalarX * frequency + octaveOffsets[i].X;
+                    float sampleY = scalarY * frequency + octaveOffsets[i].Y;
 
 
                     float perlinValue = (float)perlin.perlin(sampleX, sampleY, 0) * 2 - 1;
