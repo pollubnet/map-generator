@@ -1,0 +1,71 @@
+﻿@page "/";
+@using MapGenerator.MapGenerators.Views.Data;
+@using MapGenerator.NoiseGenerators;
+@using MapGenerator.NoiseGenerators.Data;
+@using MapGenerator.MapGenerators.Data;
+@using MapGenerator.MapGenerators.Services;
+
+@inject IMapGeneratorService MapGeneratorService;
+
+<link href="css/mapGeneratorStyle.css" rel="stylesheet" />
+
+<PageTitle>Map Geneator</PageTitle>
+
+<div id="container">
+    <div class="row m-0">
+        <div class="col-3 m-0 p-0">
+            <button @onclick="GenerateMap">Generate new</button><br />
+            <button @onclick="ShowPositions">Show positions</button><br />
+            <button @onclick="ShowNoiseValues">Show noise values</button><br />
+            <button @onclick="ToggleColors">Toggle colors</button><br />
+            <NoiseParametersView @bind-NoiseParameters="_noiseParameters"></NoiseParametersView>
+            <TileInfoView></TileInfoView>
+        </div>
+        <div class="col-9 m-0 p-0">
+            <MapView Map="_map" MapDisplayData="_mapDisplayData"></MapView>
+        </div>
+    </div>
+</div>
+
+@code {
+    private NoiseParameters _noiseParameters = new();
+    private MapDisplayData _mapDisplayData = new();
+    private MapData? _map;
+
+    private int _seed;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await GenerateMap();
+    }
+
+    private async Task GenerateMap()
+    {
+        _map = await MapGeneratorService.GetMap(_noiseParameters);
+    }
+
+    private void ShowPositions()
+    {
+        if (_mapDisplayData.TileInformationDisplay == TileInformationDisplay.Position)
+        {
+            _mapDisplayData.TileInformationDisplay = TileInformationDisplay.None;
+            return;
+        }
+        _mapDisplayData.TileInformationDisplay = TileInformationDisplay.Position;
+    }
+
+    private void ShowNoiseValues()
+    {
+        if (_mapDisplayData.TileInformationDisplay == TileInformationDisplay.Noise)
+        {
+            _mapDisplayData.TileInformationDisplay = TileInformationDisplay.None;
+            return;
+        }
+        _mapDisplayData.TileInformationDisplay = TileInformationDisplay.Noise;
+    }
+
+    private void ToggleColors()
+    {
+        _mapDisplayData.ShowColorMap = !_mapDisplayData.ShowColorMap;
+    }
+}

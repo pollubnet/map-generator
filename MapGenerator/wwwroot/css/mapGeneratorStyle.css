@@ -9,3 +9,8 @@ td {
     text-align: center;
     /* border: 1px solid black; */
 }
+
+body {
+    padding: 0;
+    background-color: #D5DBDB;
+}

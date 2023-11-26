@@ -1,4 +1,4 @@
-﻿namespace MapGenerator.Data;
+﻿namespace MapGenerator.MapGenerators.Data;
 
 public class Node
 {
