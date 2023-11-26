@@ -5,7 +5,7 @@
     <div class="mb-3">
         <input id="useRandomSeed" name="useRandomSeed" type="checkbox" @bind="NoiseParameters.UseRandomSeed" @oninput="OnNoiseParametersChanged"/>
         <label for="useRandomSeed">Use random seed</label>
-        @if (NoiseParameters.UseRandomSeed)
+        @if (!NoiseParameters.UseRandomSeed)
         {
             <br />
             <label for="seed">Seed: </label>
