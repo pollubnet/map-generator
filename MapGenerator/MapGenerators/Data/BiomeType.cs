@@ -13,4 +13,5 @@ public enum BiomeType
     Snow,
     Snow3,
     Snow4,
+    Snow5,
 }
