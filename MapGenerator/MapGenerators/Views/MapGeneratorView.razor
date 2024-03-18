@@ -18,12 +18,29 @@
             <button @onclick="ShowPositions">Show positions</button><br />
             <button @onclick="ShowNoiseValues">Show noise values</button><br />
             <button @onclick="ToggleColors">Toggle colors</button><br />
+            <button @onclick="GeneratePath">Generate walkable path</button><br />
             <NoiseParametersView @bind-NoiseParameters="_noiseParameters"></NoiseParametersView>
             <TileInfoView></TileInfoView>
         </div>
         <div class="col-9 m-0 p-0">
             <MapView Map="_map" MapDisplayData="_mapDisplayData"></MapView>
         </div>
+        <div>
+            @if (path != null)
+            {
+                <h4>Walkable Path:</h4>
+                <ul style="list-style-type: none; padding: 0; display: inline;">
+                    @foreach (var node in path)
+                    {
+                        <li style="display: inline; margin-right: 10px;">(@node.XId, @node.YId) @if (!node.Equals(path.Last()))
+                            {
+                                <span>&rarr;</span>
+                            }</li>
+                    }
+                </ul>
+            }
+        </div>
+
     </div>
 </div>
 
@@ -31,6 +48,7 @@
     private NoiseParameters _noiseParameters = new();
     private MapDisplayData _mapDisplayData = new();
     private MapData? _map;
+    private List<PathfindingNode> path { get; set; }
 
     private int _seed;
 
@@ -67,5 +85,13 @@
     private void ToggleColors()
     {
         _mapDisplayData.ShowColorMap = !_mapDisplayData.ShowColorMap;
+    }
+
+    private void GeneratePath()
+    {
+        IPathfindingService<PathfindingNode> pathfinding = new PathfindingService(_map);
+        PathfindingNode startNode = pathfinding.PathfindingNodeMap[0, 0];
+        PathfindingNode stopNode = pathfinding.PathfindingNodeMap[31, 31];
+        path = pathfinding.FindPath(startNode, stopNode);
     }
 }
