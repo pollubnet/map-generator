@@ -4,5 +4,6 @@ public enum TileInformationDisplay
 {
     None,
     Position,
-    Noise
+    Noise,
+    Path
 }

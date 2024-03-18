@@ -66,7 +66,7 @@ public class MapGeneratorService : IMapGeneratorService
 
                 grid[x, y] = new Node(x, y, null);
                 grid[x, y].NoiseValue = heightMap[x, y];
-                grid[x, y].Walkable = grid[x, y].NoiseValue > 0.2f;
+                grid[x, y].Walkable = grid[x, y].NoiseValue > 0.2f && grid[x, y].NoiseValue < 0.7f;
 
                 if (heightMap[x, y] < 0.02f)
                 {

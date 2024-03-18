@@ -19,22 +19,23 @@
             <button @onclick="GenerateMap">Generate new</button><br />
             <button @onclick="ShowPositions">Show positions</button><br />
             <button @onclick="ShowNoiseValues">Show noise values</button><br />
+            <button @onclick="ShowPath">Show path</button><br />
             <button @onclick="ToggleColors">Toggle colors</button><br />
             <button @onclick="GeneratePath">Generate walkable path</button><br />
             <NoiseParametersView @bind-NoiseParameters="_noiseParameters"></NoiseParametersView>
             <TileInfoView></TileInfoView>
         </div>
         <div class="col-9 m-0 p-0">
-            <MapView Map="_map" MapDisplayData="_mapDisplayData"></MapView>
+            <MapView Map="_map" MapDisplayData="_mapDisplayData" Path="_path"></MapView>
         </div>
         <div>
-            @if (path != null)
+            @if (_path != null)
             {
                 <h4>Walkable Path:</h4>
                 <ul style="list-style-type: none; padding: 0; display: inline;">
-                    @foreach (var node in path)
+                    @foreach (var node in _path)
                     {
-                        <li style="display: inline; margin-right: 10px;">(@node.XId, @node.YId) @if (!node.Equals(path.Last()))
+                        <li style="display: inline; margin-right: 10px;">(@node.XId, @node.YId) @if (!node.Equals(_path.Last()))
                             {
                                 <span>&rarr;</span>
                             }
@@ -51,7 +52,7 @@
     private NoiseParameters _noiseParameters = new();
     private MapDisplayData _mapDisplayData = new();
     private MapData? _map;
-    private List<IPathfindingNode> path { get; set; }
+    private List<IPathfindingNode>? _path { get; set; }
 
     private int _seed;
 
@@ -85,6 +86,16 @@
         _mapDisplayData.TileInformationDisplay = TileInformationDisplay.Noise;
     }
 
+    private void ShowPath()
+    {
+        if (_mapDisplayData.TileInformationDisplay == TileInformationDisplay.Path)
+        {
+            _mapDisplayData.TileInformationDisplay = TileInformationDisplay.None;
+            return;
+        }
+        _mapDisplayData.TileInformationDisplay = TileInformationDisplay.Path;
+    }
+
     private void ToggleColors()
     {
         _mapDisplayData.ShowColorMap = !_mapDisplayData.ShowColorMap;
@@ -94,6 +105,6 @@
     {
         IPathfindingNode startNode = MapGeneratorService.MapData.Grid[5, 5];
         IPathfindingNode stopNode = MapGeneratorService.MapData.Grid[20, 20];
-        path = Pathfinding.FindPath(startNode, stopNode);
+        _path = Pathfinding.FindPath(startNode, stopNode);
     }
 }
