@@ -7,7 +7,7 @@ namespace MapGenerator.MapGenerators.Services;
 
 public class MapGeneratorService : IMapGeneratorService
 {
-    private MapData map;
+    private MapData _mapData;
 
     private float persistance = 0.5f;
     private float lacunarity = 2f;
@@ -30,10 +30,12 @@ public class MapGeneratorService : IMapGeneratorService
 
     private int seed;
 
+    public MapData MapData { get => _mapData; }
+
     public Task<MapData> GetMap(NoiseParameters noiseParameters)
     {
-        map = GenerateMap(noiseParameters);
-        return Task.FromResult(map);
+        _mapData = GenerateMap(noiseParameters);
+        return Task.FromResult(_mapData);
         //if (map == null || noiseParameters.GenerateNew)
         //{
         //    map = GenerateMap(noiseParameters);
@@ -64,6 +66,7 @@ public class MapGeneratorService : IMapGeneratorService
 
                 grid[x, y] = new Node(x, y, null);
                 grid[x, y].NoiseValue = heightMap[x, y];
+                grid[x, y].Walkable = grid[x, y].NoiseValue > 0.2f;
 
                 if (heightMap[x, y] < 0.02f)
                 {

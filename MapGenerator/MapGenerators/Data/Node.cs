@@ -1,6 +1,8 @@
-﻿namespace MapGenerator.MapGenerators.Data;
+﻿using MapGenerator.Pathfindings.Data;
 
-public class Node
+namespace MapGenerator.MapGenerators.Data;
+
+public class Node : IPathfindingNode
 {
     public int XId { get; set; }
     public int YId { get; set; }
@@ -8,7 +10,12 @@ public class Node
 
     public string Color { get; set; }
     public float NoiseValue { get; set; }
-    public float Cos { get; set; }
+
+    public int GCost { get; set; }
+    public int HCost { get; set; }
+    public int FCost => GCost + HCost;
+    public bool Walkable { get; set; }
+    public IPathfindingNode? PreviousNode { get; set; }
 
     public Node(int xId, int yId, Biome biome)
     {

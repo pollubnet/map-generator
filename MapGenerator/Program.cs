@@ -1,4 +1,5 @@
 using MapGenerator.MapGenerators.Services;
+using MapGenerator.Pathfindings.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -6,6 +7,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
 builder.Services.AddSingleton<IMapGeneratorService, MapGeneratorService>();
+builder.Services.AddSingleton<IPathfindingService, PathfindingService>();
 
 var app = builder.Build();
 

@@ -1,11 +1,13 @@
 ﻿@page "/";
-@using MapGenerator.MapGenerators.Views.Data;
-@using MapGenerator.NoiseGenerators;
-@using MapGenerator.NoiseGenerators.Data;
-@using MapGenerator.MapGenerators.Data;
-@using MapGenerator.MapGenerators.Services;
+@using MapGenerator.MapGenerators.Data
+@using MapGenerator.MapGenerators.Services
+@using MapGenerator.MapGenerators.Views.Data
+@using MapGenerator.NoiseGenerators.Data
+@using MapGenerator.Pathfindings.Data
+@using MapGenerator.Pathfindings.Services
 
 @inject IMapGeneratorService MapGeneratorService;
+@inject IPathfindingService Pathfinding;
 
 <link href="css/mapGeneratorStyle.css" rel="stylesheet" />
 
@@ -35,7 +37,8 @@
                         <li style="display: inline; margin-right: 10px;">(@node.XId, @node.YId) @if (!node.Equals(path.Last()))
                             {
                                 <span>&rarr;</span>
-                            }</li>
+                            }
+                        </li>
                     }
                 </ul>
             }
@@ -48,7 +51,7 @@
     private NoiseParameters _noiseParameters = new();
     private MapDisplayData _mapDisplayData = new();
     private MapData? _map;
-    private List<PathfindingNode> path { get; set; }
+    private List<IPathfindingNode> path { get; set; }
 
     private int _seed;
 
@@ -89,9 +92,8 @@
 
     private void GeneratePath()
     {
-        IPathfindingService<PathfindingNode> pathfinding = new PathfindingService(_map);
-        PathfindingNode startNode = pathfinding.PathfindingNodeMap[0, 0];
-        PathfindingNode stopNode = pathfinding.PathfindingNodeMap[31, 31];
-        path = pathfinding.FindPath(startNode, stopNode);
+        IPathfindingNode startNode = MapGeneratorService.MapData.Grid[5, 5];
+        IPathfindingNode stopNode = MapGeneratorService.MapData.Grid[20, 20];
+        path = Pathfinding.FindPath(startNode, stopNode);
     }
 }
